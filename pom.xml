@@ -5,7 +5,7 @@
     <artifactId>spark-certification</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
-    <description>My wonderfull scala app</description>
+    <description>Spark Certification Preparation</description>
     <inceptionYear>2015</inceptionYear>
     <licenses>
         <license>
@@ -21,13 +21,45 @@
         <encoding>UTF-8</encoding>
         <scala.version>2.11.5</scala.version>
         <scala.compat.version>2.11</scala.compat.version>
+        <!-- Spark global props -->
+        <spark.version>2.1.0</spark.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>1.7.10</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <!-- Scala Lang -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
+        </dependency>
+
+        <!-- Scala compatible logging -->
+        <!--dependency>
+            <groupId>com.typesafe.scala-logging</groupId>
+            <artifactId>scala-logging-slf4j_${scala.compat.version}</artifactId>
+            <version>2.1.2</version>
+        </dependency-->
+
+        <!-- Spark -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.compat.version}</artifactId>
+            <version>${spark.version}</version>
         </dependency>
 
         <!-- Test -->
