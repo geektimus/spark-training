@@ -62,6 +62,14 @@
             <version>${spark.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-xml -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-xml</artifactId>
+            <version>2.11.0-M4</version>
+        </dependency>
+
+
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
@@ -88,6 +96,16 @@
         <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
@@ -105,6 +123,12 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                    <scalaCompatVersion>${scala.compat.version}</scalaCompatVersion>
+                    <recompileMode>incremental</recompileMode>
+                    <ccTestGoals>scalatest:test</ccTestGoals>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -120,6 +144,47 @@
                         <include>**/*Suite.*</include>
                     </includes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.soebes.maven.plugins</groupId>
+                <artifactId>iterator-maven-plugin</artifactId>
+                <version>0.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>iterator</goal>
+                        </goals>
+                        <configuration>
+                            <items>
+                                <item>dev</item>
+                                <item>staging</item>
+                                <item>prod</item>
+                            </items>
+
+                            <pluginExecutors>
+                                <pluginExecutor>
+                                    <plugin>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-assembly-plugin</artifactId>
+                                        <version>3.0.0</version>
+                                    </plugin>
+                                    <goal>single</goal>
+                                    <configuration>
+                                        <archive>
+                                            <manifest>
+                                                <mainClass>com.codingmaniacs.courses.spark.JobRunner</mainClass>
+                                            </manifest>
+                                        </archive>
+                                        <descriptors>
+                                            <descriptor>src/main/assembly/iterator.xml</descriptor>
+                                        </descriptors>
+                                    </configuration>
+                                </pluginExecutor>
+                            </pluginExecutors>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
