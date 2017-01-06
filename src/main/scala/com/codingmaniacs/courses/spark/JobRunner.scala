@@ -17,6 +17,8 @@ object JobRunner {
     val sparkCtx = new SparkContext(JobConfig.getConfig)
 
     val textAnalyzer = new TextAnalyzer()
-    textAnalyzer.calculateTopNWords(sparkCtx, args(0), args(1).toInt)
+    val fileName = args(0)
+    logger.debug("The file {} contains {} words", fileName, textAnalyzer.wordCount(sparkCtx, fileName))
+
   }
 }

@@ -10,7 +10,7 @@ class TextAnalyzer {
     * Calculate and display the top N most common words from a file
     *
     * @param sparkContext     Spark context required to run the computation
-    * @param fileName         File name to be processed.
+    * @param fileName         Name of the file to be processed.
     * @param numberOfElements Number of words to be retrieved
     */
   def calculateTopNWords(sparkContext: SparkContext, fileName: String, numberOfElements: Int = 10): Unit = {
@@ -33,5 +33,29 @@ class TextAnalyzer {
 
     topN.foreach(row => logger.debug("Word: [{}] - Count: [{}]", row._1, row._2))
 
+  }
+
+  /**
+    * Calculate the number of words in a file.
+    *
+    * @param sparkContext Spark context required to run the computation
+    * @param fileName     Name of the file to be processed.
+    * @return
+    */
+  def wordCount(sparkContext: SparkContext, fileName: String): Int = {
+    if (sparkContext == null || fileName == null || fileName.trim.isEmpty) {
+      logger.error("No enough parameters provided to perform the analysis.")
+      return -1
+    }
+    val text = sparkContext.textFile(fileName)
+    val analytics =
+      text
+        .flatMap(lines => lines.split(" "))
+        .map(word => word.toLowerCase.replaceAll("[,.]", ""))
+        .map(word => 1)
+        .reduce(_ + _)
+
+
+    analytics.toInt
   }
 }
