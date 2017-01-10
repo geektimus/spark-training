@@ -7,10 +7,11 @@
     <name>${project.artifactId}</name>
     <description>Spark Certification Preparation</description>
     <inceptionYear>2015</inceptionYear>
+
     <licenses>
         <license>
-            <name>My License</name>
-            <url>http://....</url>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -22,7 +23,13 @@
         <scala.version>2.11.5</scala.version>
         <scala.compat.version>2.11</scala.compat.version>
         <!-- Spark global props -->
-        <spark.version>2.1.0</spark.version>
+        <spark.version>2.0.0</spark.version>
+        <!-- Logging -->
+        <slf4j.version>1.7.10</slf4j.version>
+        <!-- Testing -->
+        <scala-test.version>3.0.1</scala-test.version>
+        <!-- MVN Plugins -->
+        <mvn-compiler.version>3.5.1</mvn-compiler.version>
     </properties>
 
     <dependencyManagement>
@@ -30,12 +37,12 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.10</version>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>log4j-over-slf4j</artifactId>
-                <version>1.7.10</version>
+                <version>${slf4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -62,14 +69,6 @@
             <version>${spark.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-xml -->
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-xml</artifactId>
-            <version>2.11.0-M4</version>
-        </dependency>
-
-
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
@@ -86,7 +85,13 @@
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.compat.version}</artifactId>
-            <version>2.2.4</version>
+            <version>${scala-test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.holdenkarau</groupId>
+            <artifactId>spark-testing-base_${scala.compat.version}</artifactId>
+            <version>${spark.version}_0.5.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -98,7 +103,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${mvn-compiler.version}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
