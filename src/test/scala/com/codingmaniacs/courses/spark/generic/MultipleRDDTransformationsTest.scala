@@ -5,6 +5,9 @@ import org.apache.spark.rdd.RDD
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.slf4j.{Logger, LoggerFactory}
 
+/**
+  * This class contains all the tests related to Transformations over two RDDs.
+  */
 class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext with BeforeAndAfter {
 
   @transient val logger: Logger = LoggerFactory.getLogger(classOf[MultipleRDDTransformationsTest])

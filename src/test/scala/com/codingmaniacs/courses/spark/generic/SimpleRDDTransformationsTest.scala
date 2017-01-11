@@ -5,6 +5,9 @@ import org.apache.spark.rdd.RDD
 import org.scalatest.FunSuite
 import org.slf4j.{Logger, LoggerFactory}
 
+/**
+  * This class contains all the tests related to single RDD over Single RDD Transformations.
+  */
 class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
 
   @transient val logger: Logger = LoggerFactory.getLogger(classOf[SimpleRDDTransformationsTest])
