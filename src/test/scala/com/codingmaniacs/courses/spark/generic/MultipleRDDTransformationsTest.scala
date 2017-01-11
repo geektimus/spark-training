@@ -3,14 +3,11 @@ package com.codingmaniacs.courses.spark.generic
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
 import org.scalatest.{BeforeAndAfter, FunSuite}
-import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * This class contains all the tests related to Transformations over two RDDs.
   */
 class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext with BeforeAndAfter {
-
-  @transient val logger: Logger = LoggerFactory.getLogger(classOf[MultipleRDDTransformationsTest])
 
   val firstList = List(1, 2, 3, 4)
   val secondList = List(4, 5, 6, 7)
@@ -24,40 +21,30 @@ class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext wi
   }
 
   test("basic union transformation") {
-    logger.debug("basic union transformation")
-
     val expected = Array(1, 2, 3, 4, 4, 5, 6, 7)
     val res = firstRDD.union(secondRDD).collect()
     assert(res.sameElements(expected))
   }
 
   test("basic intersection transformation") {
-    logger.debug("basic intersection transformation")
-
     val expected = Array(4)
     val res = firstRDD.intersection(secondRDD).collect()
     assert(res.sameElements(expected))
   }
 
   test("basic subtract transformation (A - B)") {
-    logger.debug("basic subtract transformation (A - B)")
-
     val expected = Array(1, 2, 3)
     val res = firstRDD.subtract(secondRDD).collect()
     assert(res.sameElements(expected))
   }
 
   test("basic subtract transformation (B - A)") {
-    logger.debug("basic subtract transformation (B - A)")
-
     val expected = Array(5, 6, 7)
     val res = secondRDD.subtract(firstRDD).collect()
     assert(res.sameElements(expected))
   }
 
   test("basic cartesian transformation (A * B)") {
-    logger.debug("basic cartesian transformation (A * B)")
-
     val expected = Array(
       (1, 4), (1, 5), (1, 6), (1, 7),
       (2, 4), (2, 5), (2, 6), (2, 7),
@@ -69,8 +56,6 @@ class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext wi
   }
 
   test("basic cartesian transformation (B * A)") {
-    logger.debug("basic cartesian transformation (B * A)")
-
     val expected = Array(
       (4, 1), (4, 2), (4, 3), (4, 4),
       (5, 1), (5, 2), (5, 3), (5, 4),

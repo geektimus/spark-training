@@ -10,3 +10,8 @@
 
 Notes:
 * We need to improve the parameter handling in the main class.
+
+### Tests
+
+To run the tests we just run.
+```mvn test```

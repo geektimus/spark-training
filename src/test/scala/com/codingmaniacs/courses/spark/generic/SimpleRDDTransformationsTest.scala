@@ -2,19 +2,14 @@ package com.codingmaniacs.courses.spark.generic
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.FunSuite
-import org.slf4j.{Logger, LoggerFactory}
+import org.scalatest.{BeforeAndAfter, FunSuite}
 
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.
   */
 class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
 
-  @transient val logger: Logger = LoggerFactory.getLogger(classOf[SimpleRDDTransformationsTest])
-
   test("basic map transformation") {
-    logger.debug("basic map transformation")
-
     val values = List(1, 2, 3, 4, 5)
     val valRDD: RDD[Int] = sc.parallelize(values)
 
@@ -24,7 +19,6 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
   }
 
   test("basic flatMap transformation") {
-    logger.debug("basic flatMap transformation")
     val values = List("spark apache scala", "java operations tests")
     val valRDD = sc.parallelize(values)
 
@@ -34,8 +28,6 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
   }
 
   test("basic filter transformation") {
-    logger.debug("basic filter transformation")
-
     val values = List(1, 2, 3, 4, 5)
     val valRDD: RDD[Int] = sc.parallelize(values)
 
@@ -46,8 +38,6 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
   }
 
   test("basic distinct transformation") {
-    logger.debug("basic distinct transformation")
-
     val values = "remember"
     val valRDD = sc.parallelize(values.split(""))
 
@@ -58,19 +48,6 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
   }
 
   test("basic sample transformation") {
-    logger.debug("basic distinct transformation")
-
-    val values = "remember"
-    val valRDD = sc.parallelize(values.split(""))
-    val expected = values.split("")
-
-    val res = valRDD.sample(withReplacement = false, 1).collect()
-    assert(res.sameElements(expected))
-  }
-
-  test("basic sample transformation") {
-    logger.debug("basic distinct transformation")
-
     val values = "remember"
     val valRDD = sc.parallelize(values.split(""))
     val expected = values.split("")

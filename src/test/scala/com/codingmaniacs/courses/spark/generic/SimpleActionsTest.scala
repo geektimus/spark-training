@@ -2,8 +2,7 @@ package com.codingmaniacs.courses.spark.generic
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.{BeforeAndAfter, FunSuite, Matchers}
-import org.slf4j.{Logger, LoggerFactory}
+import org.scalatest.{FunSuite, Matchers}
 
 /**
   * This class contains all the tests related to Actions over Single RDD, RDD[String] and RDD[Int] mostly.
@@ -11,12 +10,9 @@ import org.slf4j.{Logger, LoggerFactory}
   * Note: This class won't include test for each since it doesn't return any value and if we try to test it we probably
   * get a "Task not serializable" Exception trying to use the assert inside the foreach
   */
-class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers with BeforeAndAfter {
-  @transient val logger: Logger = LoggerFactory.getLogger(classOf[SimpleActionsTest])
+class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
 
   test("basic collect action") {
-    logger.debug("basic collect action")
-
     val values = List(1, 2, 3, 4, 5)
     val valRDD: RDD[Int] = sc.parallelize(values)
 
@@ -26,8 +22,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic count action") {
-    logger.debug("basic count action")
-
     val values = List(1, 2, 3, 4, 5)
     val valRDD: RDD[Int] = sc.parallelize(values)
 
@@ -37,8 +31,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic countByValue action") {
-    logger.debug("basic countByValue action")
-
     val values = List(1, 2, 3, 4, 5, 5, 3, 4, 1, 1, 1, 2, 5, 3, 2, 4)
     val valRDD: RDD[Int] = sc.parallelize(values)
     val expected = Map(1 -> 4, 2 -> 3, 3 -> 3, 4 -> 3, 5 -> 3)
@@ -50,8 +42,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic take action") {
-    logger.debug("basic take action")
-
     val values = List(1, 2, 3, 4, 5)
     val valRDD = sc.parallelize(values)
     val expected = Array(1, 2)
@@ -62,8 +52,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic top (normal) action") {
-    logger.debug("basic top (normal) action")
-
     val values = List(1, 2, 3, 4, 5)
     val valRDD = sc.parallelize(values)
     val expected = Array(5, 4)
@@ -73,8 +61,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic top (duplicated) action") {
-    logger.debug("basic top (duplicated) action")
-
     val values = List(1, 2, 3, 4, 4)
     val valRDD = sc.parallelize(values)
     val expected = Array(4, 4)
@@ -84,8 +70,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic takeOrdered (normal) action") {
-    logger.debug("basic takeOrdered (normal) action")
-
     val values = List(1, 2, 3, 4, 4)
     val valRDD = sc.parallelize(values)
     val expected = Array(1, 2)
@@ -95,8 +79,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic takeOrdered (reverse) action") {
-    logger.debug("basic takeOrdered (reverse) action")
-
     val values = List(1, 2, 3, 4)
     val valRDD = sc.parallelize(values)
     val expected = Array(4, 3)
@@ -109,8 +91,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * Take sample is nondeterministic so we can't validate the values.
     */
   test("basic takeSample action") {
-    logger.debug("basic takeSample action")
-
     val values = List(1, 2, 3, 4)
     val valRDD = sc.parallelize(values)
     val numberOfElementsToTake = 2
@@ -120,8 +100,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic reduce (numbers) action") {
-    logger.debug("basic reduce (numbers) action")
-
     val values = List(1, 2, 3, 4)
     val valRDD = sc.parallelize(values)
 
@@ -134,8 +112,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     */
   //TODO Find a way to find the shortest word using this same string as it contains two words of the same length.
   test("basic reduce (strings) action") {
-    logger.debug("basic reduce (strings) action")
-
     val values = "basic operations spark scala java python data"
     val valRDD = sc.parallelize(values.split(" "))
 
@@ -149,8 +125,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * The value passed to fold should be the identity for the operation 0 for + and 1 for *
     */
   test("basic fold action 01 (similar to reduce [sum])") {
-    logger.debug("basic fold action 01 (similar to reduce [sum])")
-
     val values = List(1, 2, 3, 4)
     val valRDD = sc.parallelize(values)
     val identity = 0
@@ -163,8 +137,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * In this case the fold behaves in a similar way to the reduce function
     */
   test("basic fold action 02 (similar to reduce [multiplication])") {
-    logger.debug("basic fold action 02 (similar to reduce [multiplication])")
-
     val values = List(1, 2, 3, 4)
     val valRDD = sc.parallelize(values)
     val identity = 1
@@ -177,8 +149,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * This is what happens when you provide a not identity value for the operation.
     */
   test("basic fold action 03") {
-    logger.debug("basic fold action 03")
-
     val values = List(1, 2, 3, 4)
     val valRDD = sc.parallelize(values)
     val identity = 2
@@ -197,8 +167,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * - (identity*num-partitions)+identity + reduce ((x,y) => x + y)
     */
   test("basic fold action 04 (sum)") {
-    logger.debug("basic fold action 04 (sum)")
-
     val values = List(("maths", 4.2), ("science", 3.8))
     val valRDD = sc.parallelize(values)
 
@@ -222,8 +190,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * - pow(identity, num-partitions + 1) * reduce ((x,y) => x * y)
     */
   test("basic fold action 05 (multiplication)") {
-    logger.debug("basic fold action 05 (multiplication)")
-
     val Eps = 1e-3
 
     val values = List(("maths", 4.2), ("science", 3.8))
@@ -244,8 +210,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
     * The result of the fold (with a non identity value) vs the result of the reduce
     */
   test("basic fold action 06 (reduce vs fold (non identity value)") {
-    logger.debug("basic fold action 06 (reduce vs fold (non identity value)")
-
     val values = List(("maths", 4.2), ("science", 3.8))
     val valRDD = sc.parallelize(values)
 
@@ -267,8 +231,6 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers w
   }
 
   test("basic aggregate action") {
-    logger.debug("basic aggregate action")
-
     val values = List(1, 2, 3, 3)
     val valRDD = sc.parallelize(values)
     val zeroValue = (0, 0)
