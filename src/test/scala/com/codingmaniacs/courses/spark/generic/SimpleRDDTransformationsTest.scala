@@ -41,9 +41,8 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
     val values = "remember"
     val valRDD = sc.parallelize(values.split(""))
 
-    val expected = "embr"
-    val res = valRDD.distinct().collect().mkString("")
-
+    val expected = "bemr"
+    val res = valRDD.distinct().sortBy(x => x).collect().mkString("")
     assert(res.equals(expected))
   }
 

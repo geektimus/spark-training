@@ -34,13 +34,13 @@ class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext wi
 
   test("basic subtract transformation (A - B)") {
     val expected = Array(1, 2, 3)
-    val res = firstRDD.subtract(secondRDD).collect()
+    val res = firstRDD.subtract(secondRDD).sortBy(x => x).collect()
     assert(res.sameElements(expected))
   }
 
   test("basic subtract transformation (B - A)") {
     val expected = Array(5, 6, 7)
-    val res = secondRDD.subtract(firstRDD).collect()
+    val res = secondRDD.subtract(firstRDD).sortBy(x => x).collect()
     assert(res.sameElements(expected))
   }
 
@@ -51,7 +51,7 @@ class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext wi
       (3, 4), (3, 5), (3, 6), (3, 7),
       (4, 4), (4, 5), (4, 6), (4, 7))
 
-    val res = firstRDD.cartesian(secondRDD).collect()
+    val res = firstRDD.cartesian(secondRDD).sortBy(x => x).collect()
     assert(res.sameElements(expected))
   }
 
@@ -62,7 +62,7 @@ class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext wi
       (6, 1), (6, 2), (6, 3), (6, 4),
       (7, 1), (7, 2), (7, 3), (7, 4))
 
-    val res = secondRDD.cartesian(firstRDD).collect()
+    val res = secondRDD.cartesian(firstRDD).sortBy(x => x).collect()
     assert(res.sameElements(expected))
   }
 }

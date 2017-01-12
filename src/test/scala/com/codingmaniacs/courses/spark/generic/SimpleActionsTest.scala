@@ -12,6 +12,8 @@ import org.scalatest.{FunSuite, Matchers}
   */
 class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
 
+  val default_parellelism: Int = 4
+
   test("basic collect action") {
     val values = List(1, 2, 3, 4, 5)
     val valRDD: RDD[Int] = sc.parallelize(values)
@@ -126,7 +128,7 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     */
   test("basic fold action 01 (similar to reduce [sum])") {
     val values = List(1, 2, 3, 4)
-    val valRDD = sc.parallelize(values)
+    val valRDD = sc.parallelize(values, default_parellelism)
     val identity = 0
 
     val res = valRDD.fold(identity)((x, y) => x + y)
@@ -138,7 +140,7 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     */
   test("basic fold action 02 (similar to reduce [multiplication])") {
     val values = List(1, 2, 3, 4)
-    val valRDD = sc.parallelize(values)
+    val valRDD = sc.parallelize(values, default_parellelism)
     val identity = 1
 
     val res = valRDD.fold(identity)((x, y) => x * y)
@@ -150,7 +152,7 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     */
   test("basic fold action 03") {
     val values = List(1, 2, 3, 4)
-    val valRDD = sc.parallelize(values)
+    val valRDD = sc.parallelize(values, default_parellelism)
     val identity = 2
 
     val res = valRDD.fold(identity)((x, y) => x + y)
@@ -168,7 +170,7 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     */
   test("basic fold action 04 (sum)") {
     val values = List(("maths", 4.2), ("science", 3.8))
-    val valRDD = sc.parallelize(values)
+    val valRDD = sc.parallelize(values, default_parellelism)
 
     val identity = ("extra", 0.5)
 
@@ -193,7 +195,7 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     val Eps = 1e-3
 
     val values = List(("maths", 4.2), ("science", 3.8))
-    val valRDD = sc.parallelize(values)
+    val valRDD = sc.parallelize(values, default_parellelism)
     val identity = ("extra", 0.5)
 
     val expected = 0.49875
@@ -211,7 +213,7 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     */
   test("basic fold action 06 (reduce vs fold (non identity value)") {
     val values = List(("maths", 4.2), ("science", 3.8))
-    val valRDD = sc.parallelize(values)
+    val valRDD = sc.parallelize(values, default_parellelism)
 
     valRDD.persist()
 
