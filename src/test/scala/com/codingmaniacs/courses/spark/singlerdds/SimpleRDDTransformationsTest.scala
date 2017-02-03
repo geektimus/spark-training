@@ -1,8 +1,8 @@
-package com.codingmaniacs.courses.spark.generic
+package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.FunSuite
 
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.

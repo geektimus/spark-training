@@ -1,4 +1,4 @@
-package com.codingmaniacs.courses.spark.generic
+package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
