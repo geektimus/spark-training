@@ -9,7 +9,7 @@ import org.slf4j.{Logger, LoggerFactory}
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.
   */
-class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with BeforeAndAfter {
+class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
 
   @transient
   lazy val logger: Logger = LoggerFactory.getLogger(this.getClass)
@@ -39,5 +39,18 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     val expected = Array(("sometimes", 1), ("disappear", 1), ("wondering", 1))
 
     assert(result.sameElements(expected))
+  }
+
+  test("basic groupByKey transformation") {
+    val extractRDD = sc.parallelize(extract.split("\n"))
+
+    val groupByKey = extractRDD
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .map(word => word.replaceAll("[;.,]", ""))
+      .map(word => (word, 1))
+      .groupByKey()
+      .
+
+    groupByKey.foreach(x => x._2.foreach(println))
   }
 }
