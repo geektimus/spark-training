@@ -95,4 +95,28 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     averageScores.getOrElse("Wilma", 0.0) should be(95.333 +- Eps)
   }
 
+  test("basic mapValues transformation") {
+    val extractRDD = sc.parallelize(extract.split("\n"))
+
+    val wordCounts = extractRDD
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .map(word => word.replaceAll("[;.,\n\r]", ""))
+      .filter(x => x.length > 0)
+      .map(word => (word, 1))
+      .reduceByKey((x, y) => x + y).persist()
+
+    val totalWordCount = wordCounts
+      .map(_._2)
+      .reduce((x, y) => x + y)
+
+    val wordWeights = wordCounts
+      .mapValues(value => math round ((value * 100) / totalWordCount.toFloat))
+      .filter(value => value._2 > 5) // Filter words with less than 5% of occurrences.
+      .collectAsMap()
+
+    val expectedPercentage = Map("it" -> 8, "i" -> 8)
+
+    assert(wordWeights.equals(expectedPercentage))
+
+  }
 }
