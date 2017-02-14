@@ -140,4 +140,56 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     assert(wordsCount == expectedWordCount)
   }
 
+  test("basic keys retrieval") {
+    val extractRDD = sc.parallelize(extract.split("\n"))
+
+    val wordsByInitialLetter = extractRDD
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .map(word => word.replaceAll("[;.,\n\r]", ""))
+      .filter(word => word.length > 0)
+      .map(word => (word.charAt(0), 1))
+      .groupByKey()
+
+    val keys = wordsByInitialLetter.keys.collect().sortBy(x => x).mkString("")
+
+    val expectedResult = "abcdefghiklmnopqrstuwy"
+    assert(keys == expectedResult)
+
+  }
+
+  test("basic values retrieval") {
+    val extractRDD = sc.parallelize(extract.split("\n"))
+
+    val wordsByInitialLetter = extractRDD
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .map(word => word.replaceAll("[;.,\n\r]", ""))
+      .filter(word => word.length > 0)
+      .map(word => (word.charAt(0), 1))
+      .reduceByKey((x, y) => x + y)
+
+    val values = wordsByInitialLetter.values.reduce((x, y) => x + y)
+
+    val expectedResult = 113
+    assert(values == expectedResult)
+
+  }
+
+  test("basic sortByKeys transformation") {
+    val extractRDD = sc.parallelize(extract.split("\n"))
+
+    val wordsByInitialLetter = extractRDD
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .map(word => word.replaceAll("[;.,\n\r]", ""))
+      .filter(word => word.length > 0)
+      .map(word => (word.charAt(0), 1))
+      .reduceByKey((x, y) => x + y)
+      .sortByKey(ascending = true)
+
+    val keys = wordsByInitialLetter.keys.collect().mkString("")
+
+    val expectedResult = "abcdefghiklmnopqrstuwy"
+    assert(keys == expectedResult)
+
+  }
+
 }
