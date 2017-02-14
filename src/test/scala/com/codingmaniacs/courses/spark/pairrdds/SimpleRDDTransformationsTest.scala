@@ -119,4 +119,25 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     assert(wordWeights.equals(expectedPercentage))
 
   }
+
+  test("basic flatMapValues transformation") {
+    val extractRDD = sc.parallelize(extract.split("\n"))
+
+    val wordsByInitialLetter = extractRDD
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .map(word => word.replaceAll("[;.,\n\r]", ""))
+      .filter(word => word.length > 0)
+      .map(word => (word.charAt(0), 1))
+      .groupByKey()
+
+    val wordsCount = wordsByInitialLetter
+      .flatMapValues(x => x)
+      .values
+      .reduce((x, y) => x + y)
+
+    val expectedWordCount = 113
+
+    assert(wordsCount == expectedWordCount)
+  }
+
 }
