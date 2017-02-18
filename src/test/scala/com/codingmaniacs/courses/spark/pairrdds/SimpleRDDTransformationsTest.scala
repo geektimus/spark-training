@@ -34,10 +34,11 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
       .filter(x => x.length > 8)
       .map(word => (word, 1))
       .reduceByKey((x, y) => x + y)
+      .sortByKey(ascending = true)
 
     val result = reduceBy.collect()
 
-    val expected = Array(("sometimes", 1), ("disappear", 1), ("wondering", 1))
+    val expected = Array(("disappear", 1), ("sometimes", 1), ("wondering", 1))
 
     assert(result.sameElements(expected))
   }

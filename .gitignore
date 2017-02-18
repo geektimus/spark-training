@@ -39,3 +39,10 @@ build.log
 
 #SHITTY output not in target directory
 build.log
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

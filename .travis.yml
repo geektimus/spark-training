@@ -1,1 +1,11 @@
 language: java
+
+# blocklist
+branches:
+  except:
+  - /^feature.*$/
+
+# safelist
+branches:
+  only:
+  - master
