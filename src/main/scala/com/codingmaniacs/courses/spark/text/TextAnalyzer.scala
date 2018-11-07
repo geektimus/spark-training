@@ -48,14 +48,35 @@ class TextAnalyzer {
       return -1
     }
     val text = sparkContext.textFile(fileName)
-    val analytics =
+    text
+      .flatMap(lines => lines.split(" "))
+      .map(word => word.toLowerCase.replaceAll("[,.]", ""))
+      .map(_ => 1)
+      .reduce(_ + _)
+  }
+
+  /**
+    * Calculate how many lines start with the same word\ and group them.
+    *
+    * @param sparkContext Spark context required to run the computation
+    * @param fileName     Name of the file to be processed.
+    * @return
+    */
+  def countDataPerRow(sparkContext: SparkContext, fileName: String): Array[(String, Long)] = (sparkContext, fileName) match {
+    case (ctx, _) if ctx == null =>
+      logger.error("The required spark context to perform this operation was not provided.")
+      Array[(String, Long)]()
+
+    case (_, name) if name == null || name.trim.isEmpty =>
+      logger.error("Cannot perform analysis without a source file.")
+      Array[(String, Long)]()
+
+    case (ctx, name) =>
+      val text = ctx.textFile(name)
       text
-        .flatMap(lines => lines.split(" "))
-        .map(word => word.toLowerCase.replaceAll("[,.]", ""))
-        .map(word => 1)
-        .reduce(_ + _)
-
-
-    analytics.toInt
+        .map(line => line.split(" ")(0))
+        .map(startWord => (startWord, 1L))
+        .reduceByKey((accumulator, n) => accumulator + n)
+        .collect()
   }
 }
