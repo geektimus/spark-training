@@ -62,21 +62,24 @@ class TextAnalyzer {
     * @param fileName     Name of the file to be processed.
     * @return
     */
-  def countDataPerRow(sparkContext: SparkContext, fileName: String): Array[(String, Long)] = (sparkContext, fileName) match {
+  def countDataPerRow(sparkContext: SparkContext, fileName: String): Array[(String, (Long, Double))] = (sparkContext, fileName) match {
     case (ctx, _) if ctx == null =>
       logger.error("The required spark context to perform this operation was not provided.")
-      Array[(String, Long)]()
+      Array[(String, (Long, Double))]()
 
     case (_, name) if name == null || name.trim.isEmpty =>
       logger.error("Cannot perform analysis without a source file.")
-      Array[(String, Long)]()
+      Array[(String, (Long, Double))]()
 
     case (ctx, name) =>
       val text = ctx.textFile(name)
-      text
+      val counts = text
         .map(line => line.split(" ")(0))
         .map(startWord => (startWord, 1L))
-        .reduceByKey((accumulator, n) => accumulator + n)
-        .collect()
+        .aggregateByKey(0L)((sum, pair) => sum + pair, _ + _)
+
+      val totals = counts.map(_._2).reduce((x,y) => x + y)
+
+      counts.mapValues(c => (c, c * 100.0 / totals)).sortBy(a => a._2._2, ascending = false).collect()
   }
 }
