@@ -26,7 +26,9 @@ object JobRunner {
         val wordsGrouped = textAnalyzer.countDataPerRow(sparkCtx, fileName)
         wordsGrouped match {
           case invalid if invalid == null || invalid.isEmpty => logger.info("No data found")
-          case data => data.foreach(word => logger.info(s"There are ${word._2.format()} lines starting with ${word._1}" ))
+          case data => data.foreach(
+            w => logger.info(s"There are ${w._2._1.format()} lines starting with ${w._1}, meaning ${w._2._2.format(true)} %" )
+          )
         }
     }
   }
