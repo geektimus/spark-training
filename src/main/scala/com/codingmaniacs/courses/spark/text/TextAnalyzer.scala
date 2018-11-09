@@ -80,6 +80,15 @@ class TextAnalyzer {
 
       val totals = counts.map(_._2).reduce((x,y) => x + y)
 
-      counts.mapValues(c => (c, c * 100.0 / totals)).sortBy(a => a._2._2, ascending = false).collect()
+      val percentageTuple = (total: Long) => (number: Long) => {
+        (number, number * 100.0 / total)
+      }
+
+      val calculatePercentage = percentageTuple(totals)
+
+      counts
+        .mapValues(c => calculatePercentage(c))
+        .sortBy(a => a._2._2, ascending = false)
+        .collect()
   }
 }
