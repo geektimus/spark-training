@@ -29,8 +29,9 @@
         <!-- Testing -->
         <scala-test.version>3.0.1</scala-test.version>
         <!-- MVN Plugins -->
-        <mvn-compiler.version>3.5.1</mvn-compiler.version>
-        <scala-test-plugin.version>1.0</scala-test-plugin.version>
+        <mvn-compiler.plugin.version>3.5.1</mvn-compiler.plugin.version>
+        <mvn-shade.plugin.version>3.2.0</mvn-shade.plugin.version>
+        <scala-test.plugin.version>1.0</scala-test.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -104,7 +105,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${mvn-compiler.version}</version>
+                <version>${mvn-compiler.plugin.version}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -149,7 +150,7 @@
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
-                <version>${scala-test-plugin.version}</version>
+                <version>${scala-test.plugin.version}</version>
                 <configuration>
                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <junitxml>.</junitxml>
@@ -166,42 +167,34 @@
             </plugin>
 
             <plugin>
-                <groupId>com.soebes.maven.plugins</groupId>
-                <artifactId>iterator-maven-plugin</artifactId>
-                <version>0.5.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${mvn-shade.plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>iterator</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <items>
-                                <item>dev</item>
-                                <item>staging</item>
-                                <item>prod</item>
-                            </items>
-
-                            <pluginExecutors>
-                                <pluginExecutor>
-                                    <plugin>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-assembly-plugin</artifactId>
-                                        <version>3.0.0</version>
-                                    </plugin>
-                                    <goal>single</goal>
-                                    <configuration>
-                                        <archive>
-                                            <manifest>
-                                                <mainClass>com.codingmaniacs.courses.spark.JobRunner</mainClass>
-                                            </manifest>
-                                        </archive>
-                                        <descriptors>
-                                            <descriptor>src/main/assembly/iterator.xml</descriptor>
-                                        </descriptors>
-                                    </configuration>
-                                </pluginExecutor>
-                            </pluginExecutors>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.codingmaniacs.courses.spark.JobRunner</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <createSourcesJar>true</createSourcesJar>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
