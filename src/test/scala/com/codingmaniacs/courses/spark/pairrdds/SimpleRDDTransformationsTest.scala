@@ -11,9 +11,6 @@ import org.slf4j.{Logger, LoggerFactory}
   */
 class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with Matchers {
 
-  @transient
-  lazy val logger: Logger = LoggerFactory.getLogger(this.getClass)
-
   val extract: String =
     """
       Bilbo drew his hand over his eyes. I am sorry, he said. But I felt so
