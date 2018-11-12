@@ -3,6 +3,8 @@ package com.codingmaniacs.courses.spark.utils
 import java.text.NumberFormat
 import java.util.Locale
 
+import scala.language.implicitConversions
+
 object StringUtils {
   implicit class LongNumberFormatter(num: Long) {
     implicit def format(): String = {

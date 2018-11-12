@@ -23,7 +23,7 @@
         <scala.version>2.11.5</scala.version>
         <scala.compat.version>2.11</scala.compat.version>
         <!-- Spark global props -->
-        <spark.version>2.0.0</spark.version>
+        <spark.version>2.3.1</spark.version>
         <!-- Logging -->
         <slf4j.version>1.7.10</slf4j.version>
         <!-- Testing -->
@@ -32,6 +32,7 @@
         <mvn-compiler.plugin.version>3.5.1</mvn-compiler.plugin.version>
         <mvn-shade.plugin.version>3.2.0</mvn-shade.plugin.version>
         <scala-test.plugin.version>1.0</scala-test.plugin.version>
+        <scala-mvn.plugin.version>3.4.4</scala-mvn.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -93,7 +94,7 @@
         <dependency>
             <groupId>com.holdenkarau</groupId>
             <artifactId>spark-testing-base_${scala.compat.version}</artifactId>
-            <version>${spark.version}_0.5.0</version>
+            <version>${spark.version}_0.10.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -103,20 +104,10 @@
         <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${mvn-compiler.plugin.version}</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${scala-mvn.plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -135,6 +126,11 @@
                     <scalaCompatVersion>${scala.compat.version}</scalaCompatVersion>
                     <recompileMode>incremental</recompileMode>
                     <ccTestGoals>scalatest:test</ccTestGoals>
+                    <args>
+                        <arg>-unchecked</arg>
+                        <arg>-deprecation</arg>
+                        <arg>-explaintypes</arg>
+                    </args>
                 </configuration>
             </plugin>
             <!-- Disable surefire plugin -->
@@ -184,7 +180,6 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <createSourcesJar>true</createSourcesJar>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>

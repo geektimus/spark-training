@@ -20,10 +20,9 @@ object JobRunner {
       case argPassed =>
         val sparkCtx = new SparkContext(JobConfig.getConfig)
 
-        val textAnalyzer = new TextAnalyzer()
         val fileName = argPassed(0)
 
-        val wordsGrouped = textAnalyzer.countDataPerRow(sparkCtx, fileName)
+        val wordsGrouped = TextAnalyzer.countDataPerRowInFile(fileName)(sparkCtx)
         wordsGrouped match {
           case invalid if invalid == null || invalid.isEmpty => logger.info("No data found")
           case data => data.foreach(
