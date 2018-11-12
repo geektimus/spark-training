@@ -14,7 +14,9 @@ class TextAnalyzerTest extends FunSuite with SharedSparkContext with Matchers {
          |informed yet had admitted strictly how you.
       """.trim.stripMargin
 
-    val result = TextAnalyzer.wordCountInText(randomText)(sc)
+    val textRDD = sc.parallelize(randomText.split("\n"))
+
+    val result = TextAnalyzer.wordCountInText(textRDD)
 
     val expected = 48 //Non unique words
 
@@ -33,7 +35,9 @@ class TextAnalyzerTest extends FunSuite with SharedSparkContext with Matchers {
         |my pocket. I don't know why. And I don't seem able to make up my mind.
       """.trim.stripMargin
 
-    val result = TextAnalyzer.calculateTopNWordsInText(randomText, 3)(sc)
+    val textRDD = sc.parallelize(randomText.split("\n"))
+
+    val result = TextAnalyzer.calculateTopNWordsInText(textRDD, 3)
 
     val expected = Array(("don't", 3), ("make", 2), ("felt", 2))
 
@@ -53,7 +57,9 @@ class TextAnalyzerTest extends FunSuite with SharedSparkContext with Matchers {
         |INFO: Dummy Info 5
       """.trim.stripMargin
 
-    val result = TextAnalyzer.countDataPerRowInText(logLines)(sc)
+    val textRDD = sc.parallelize(logLines.split("\n"))
+
+    val result = TextAnalyzer.countDataPerRowInText(textRDD)
 
     val expected = Array(("INFO:", (5, 62.5)), ("ERROR:", (2, 25)), ("WARN:", (1, 12.5)))
 
