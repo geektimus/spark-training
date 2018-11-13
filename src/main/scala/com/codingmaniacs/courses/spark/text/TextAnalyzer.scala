@@ -4,6 +4,8 @@ import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.util.matching.Regex
+
 object TextAnalyzer {
 
   private val percentageTuple = (total: Long) => (number: Long) => {
@@ -85,12 +87,12 @@ object TextAnalyzer {
     * @param sparkContext Spark context required to run the computation
     * @return
     */
-  def countDataPerRowInFile(fileName: String)(implicit sparkContext: SparkContext): Array[(String, (Long, Double))] = fileName match {
+  def countDataPerRowInFile(regex: Regex, fileName: String)(implicit sparkContext: SparkContext): Array[(String, (Long, Double))] = fileName match {
     case name if name == null || name.trim.isEmpty =>
       logger.error("Cannot perform analysis without a source file.")
       Array[(String, (Long, Double))]()
 
-    case name => countDataPerRowInText(sparkContext.textFile(name))
+    case name => countDataPerRowInText(regex, sparkContext.textFile(name))
   }
 
   /**
@@ -99,7 +101,7 @@ object TextAnalyzer {
     * @param contents Data to be processed.
     * @return
     */
-  def countDataPerRowInText(contents: RDD[String]): Array[(String, (Long, Double))] = contents match {
+  def countDataPerRowInText(regex: Regex, contents: RDD[String]): Array[(String, (Long, Double))] = contents match {
 
     case data if data == null || data.isEmpty =>
       logger.error("Cannot perform analysis without data.")
@@ -108,7 +110,10 @@ object TextAnalyzer {
     case data =>
       val counts =
         data
-          .map(line => line.split(" ")(0))
+          .map(line => {
+            val regex(value) = line
+            value
+          })
           .map(startWord => (startWord, 1L))
           .aggregateByKey(0L)((sum, pair) => sum + pair, _ + _)
 

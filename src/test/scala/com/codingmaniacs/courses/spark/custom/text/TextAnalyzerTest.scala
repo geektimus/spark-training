@@ -57,11 +57,37 @@ class TextAnalyzerTest extends FunSuite with SharedSparkContext with Matchers {
         |INFO: Dummy Info 5
       """.trim.stripMargin
 
+    val regex = """^([A-Z]+):.*""".r
+
     val textRDD = sc.parallelize(logLines.split("\n"))
 
-    val result = TextAnalyzer.countDataPerRowInText(textRDD)
+    val result = TextAnalyzer.countDataPerRowInText(regex, textRDD)
 
-    val expected = Array(("INFO:", (5, 62.5)), ("ERROR:", (2, 25)), ("WARN:", (1, 12.5)))
+    val expected = Array(("INFO", (5, 62.5)), ("ERROR", (2, 25)), ("WARN", (1, 12.5)))
+
+    assert(result.sameElements(expected))
+  }
+
+  test("The text analyzer should group the lines by the regex and count the number of appearances") {
+    val logLines: String =
+      """
+        |INFO: Dummy Info 1
+        |INFO: Dummy Info 2
+        |ERROR: Dummy Error 1
+        |INFO: Dummy Info 3
+        |INFO: Dummy Info 4
+        |ERROR: Dummy Error 2
+        |WARN: Dummy WARN 1
+        |INFO: Dummy Info 5
+      """.trim.stripMargin
+
+    val regex = """^([A-Z]+):.*""".r
+
+    val contentRDD = sc.parallelize(logLines.split("\n"))
+
+    val result = TextAnalyzer.countDataPerRowInText(regex, contentRDD)
+
+    val expected = Array(("INFO", (5, 62.5)), ("ERROR", (2, 25)), ("WARN", (1, 12.5)))
 
     assert(result.sameElements(expected))
   }
