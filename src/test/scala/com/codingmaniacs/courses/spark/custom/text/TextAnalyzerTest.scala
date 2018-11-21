@@ -1,5 +1,7 @@
 package com.codingmaniacs.courses.spark.custom.text
 
+import java.util
+
 import com.codingmaniacs.courses.spark.text.TextAnalyzer
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.scalatest.{FunSuite, Matchers}
@@ -37,11 +39,11 @@ class TextAnalyzerTest extends FunSuite with SharedSparkContext with Matchers {
 
     val textRDD = sc.parallelize(randomText.split("\n"))
 
-    val result = TextAnalyzer.calculateTopNWordsInText(textRDD, 3)
+    val result = TextAnalyzer.calculateTopNWordsInText(textRDD, 4)
 
-    val expected = Array(("don't", 3), ("make", 2), ("felt", 2))
+    val expected = Array(("don't", 3), ("make", 2), ("felt", 2), ("mind", 2))
 
-    assert(result.sameElements(expected))
+    result should contain allElementsOf expected
   }
 
   test("The text analyzer should group the lines by the first word and count the number of appearances") {
