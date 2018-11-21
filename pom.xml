@@ -17,21 +17,20 @@
     </licenses>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <encoding>UTF-8</encoding>
-        <scala.version>2.11.5</scala.version>
+        <scala.version>2.11.11</scala.version>
         <scala.compat.version>2.11</scala.compat.version>
         <!-- Spark global props -->
         <spark.version>2.3.1</spark.version>
         <!-- Logging -->
-        <slf4j.version>1.7.10</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <!-- Testing -->
-        <scala-test.version>3.0.1</scala-test.version>
+        <scala-test.version>3.0.4</scala-test.version>
+        <spark-testing-base.version>0.10.0</spark-testing-base.version>
         <!-- MVN Plugins -->
-        <mvn-compiler.plugin.version>3.5.1</mvn-compiler.plugin.version>
         <mvn-shade.plugin.version>3.2.0</mvn-shade.plugin.version>
-        <scala-test.plugin.version>1.0</scala-test.plugin.version>
+        <mvn-surefire.plugin.version>2.22.1</mvn-surefire.plugin.version>
+        <scala-test.plugin.version>2.0.0</scala-test.plugin.version>
         <scala-mvn.plugin.version>3.4.4</scala-mvn.plugin.version>
     </properties>
 
@@ -58,13 +57,6 @@
             <version>${scala.version}</version>
         </dependency>
 
-        <!-- Scala compatible logging -->
-        <!--dependency>
-            <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging-slf4j_${scala.compat.version}</artifactId>
-            <version>2.1.2</version>
-        </dependency-->
-
         <!-- Spark -->
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -74,18 +66,6 @@
 
         <!-- Test -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.specs2</groupId>
-            <artifactId>specs2-core_${scala.compat.version}</artifactId>
-            <version>2.4.16</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.compat.version}</artifactId>
             <version>${scala-test.version}</version>
@@ -94,7 +74,7 @@
         <dependency>
             <groupId>com.holdenkarau</groupId>
             <artifactId>spark-testing-base_${scala.compat.version}</artifactId>
-            <version>${spark.version}_0.10.0</version>
+            <version>${spark.version}_${spark-testing-base.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -124,7 +104,6 @@
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
                     <scalaCompatVersion>${scala.compat.version}</scalaCompatVersion>
-                    <recompileMode>incremental</recompileMode>
                     <ccTestGoals>scalatest:test</ccTestGoals>
                     <args>
                         <arg>-unchecked</arg>
@@ -137,7 +116,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
+                <version>${mvn-surefire.plugin.version}</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
