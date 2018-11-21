@@ -1,4 +1,6 @@
-# Spark Certification Preparation
+# Spark Certification Preparation 
+
+[![Build Status](https://travis-ci.org/geektimus/spark-training.svg?branch=master)](https://travis-ci.org/geektimus/spark-training)
 
 ## Chapter 1: Introduction to Data Analysis with Spark
 ## Chapter 2: Downloading Spark and Getting Started
