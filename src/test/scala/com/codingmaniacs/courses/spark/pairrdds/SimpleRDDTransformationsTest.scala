@@ -1,10 +1,30 @@
+/*
+ * Copyright (c) 2020 Geektimus
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package com.codingmaniacs.courses.spark.pairrdds
 
 import java.util.Locale
 
 import com.holdenkarau.spark.testing.SharedSparkContext
-import org.scalatest.{FunSuite, Matchers}
-import org.slf4j.{Logger, LoggerFactory}
+import org.scalatest.{ FunSuite, Matchers }
 
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.
@@ -64,7 +84,14 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
 
     val Eps = 1e-3
 
-    val initialScores = Array(("Fred", 88.0), ("Fred", 95.0), ("Fred", 91.0), ("Wilma", 93.0), ("Wilma", 95.0), ("Wilma", 98.0))
+    val initialScores = Array(
+      ("Fred", 88.0),
+      ("Fred", 95.0),
+      ("Fred", 91.0),
+      ("Wilma", 93.0),
+      ("Wilma", 95.0),
+      ("Wilma", 98.0)
+    )
 
     val wilmaAndFredScores = sc.parallelize(initialScores).cache()
 
@@ -101,7 +128,8 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(x => x.length > 0)
       .map(word => (word, 1))
-      .reduceByKey((x, y) => x + y).persist()
+      .reduceByKey((x, y) => x + y)
+      .persist()
 
     val totalWordCount = wordCounts
       .map(_._2)

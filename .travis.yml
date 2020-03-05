@@ -1,14 +1,15 @@
-language: java
+language: scala
+
+scala:
+  - 2.12.10
 
 jdk:
   - openjdk8
 
-# blocklist
 branches:
-  except:
-  - /^feature.*$/
-
-# safelist
-branches:
+  # safe list
   only:
-  - master
+    - master
+  except:
+    # block list
+    - /^feature.*$/

@@ -1,8 +1,29 @@
+/*
+ * Copyright (c) 2020 Geektimus
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.{ FunSuite, Matchers }
 
 /**
   * This class contains all the tests related to Actions over Single RDD, RDD[String] and RDD[Int] mostly.
@@ -117,8 +138,8 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
     val values = "basic operations spark scala java python data"
     val valRDD = sc.parallelize(values.split(" "))
 
-
-    val res = valRDD.reduce((word_a, word_b) => if (word_a.length > word_b.length) word_a else word_b)
+    val res =
+      valRDD.reduce((word_a, word_b) => if (word_a.length > word_b.length) word_a else word_b)
     assert(res == "operations")
   }
 
@@ -239,7 +260,8 @@ class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
 
     val res = valRDD.aggregate(zeroValue)(
       (accumulator, value) => (accumulator._1 + value, accumulator._2 + 1),
-      (accumulator_1, accumulator_2) => (accumulator_1._1 + accumulator_2._1, accumulator_1._2 + accumulator_2._2)
+      (accumulator_1, accumulator_2) =>
+        (accumulator_1._1 + accumulator_2._1, accumulator_1._2 + accumulator_2._2)
     )
 
     val expected = (9, 4)
