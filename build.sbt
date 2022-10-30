@@ -7,7 +7,7 @@ lazy val `spark-challenges` =
     .settings(dockerSettings)
     .settings(
       libraryDependencies ++= dependencies,
-      version in Docker := "0.1.0-SNAPSHOT"
+      Docker / version := "0.1.0-SNAPSHOT"
     )
 
 // *****************************************************************************
@@ -19,13 +19,13 @@ lazy val library =
 
     object Version {
 
-      val sparkVersion = "2.4.3"
-      val sparkTestingBase = s"${sparkVersion}_0.12.0"
-      val log4j2 = "2.11.0"
-      val slf4j = "1.7.30"
-      val scalaCheck = "1.14.0"
-      val specs2 = "4.8.1"
-      val reflect = "2.12.10"
+      val sparkVersion = "3.3.0"
+      val sparkTestingBase = "3.3.0_1.2.0"
+      val log4j2 = "2.19.0"
+      val slf4j = "2.0.3"
+      val scalaCheck = "1.17.0"
+      val specs2 = "4.17.0"
+      val reflect = "2.13.10"
     }
 
     // Spark Stuff
@@ -58,8 +58,7 @@ lazy val settings =
 
 lazy val commonSettings =
   Seq(
-    // scalaVersion from .travis.yml via sbt-travisci
-    // scalaVersion := "2.12.9",
+    scalaVersion := "2.12.12",
     version := "0.1.0-SNAPSHOT",
     organization := "com.codingmaniacs.courses",
     headerLicense := Some(HeaderLicense.MIT("2020", "Geektimus")),
@@ -85,9 +84,9 @@ lazy val commonSettings =
         "-Ywarn-unused-import",
         "-Ywarn-value-discard"
       ),
-    parallelExecution.in(Test) := false,
-    unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
-    unmanagedSourceDirectories.in(Test) := Seq(scalaSource.in(Test).value)
+    Test / parallelExecution := false,
+    Compile / unmanagedSourceDirectories := Seq((Compile / scalaSource).value),
+    Test / unmanagedSourceDirectories := Seq((Test / scalaSource).value)
   )
 
 lazy val dependencies =

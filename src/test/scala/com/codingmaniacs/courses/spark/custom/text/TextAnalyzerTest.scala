@@ -23,9 +23,10 @@ package com.codingmaniacs.courses.spark.custom.text
 
 import com.codingmaniacs.courses.spark.text.TextAnalyzer
 import com.holdenkarau.spark.testing.SharedSparkContext
-import org.scalatest.{ FunSuite, Matchers }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class TextAnalyzerTest extends FunSuite with SharedSparkContext with Matchers {
+class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers {
 
   test("The text analyzer should count the number of words in a text") {
     val randomText: String =

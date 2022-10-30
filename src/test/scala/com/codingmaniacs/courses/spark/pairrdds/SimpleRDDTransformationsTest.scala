@@ -22,14 +22,14 @@
 package com.codingmaniacs.courses.spark.pairrdds
 
 import java.util.Locale
-
 import com.holdenkarau.spark.testing.SharedSparkContext
-import org.scalatest.{ FunSuite, Matchers }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.
   */
-class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with Matchers {
+class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext with Matchers {
 
   val extract: String =
     """
@@ -126,7 +126,7 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     val wordCounts = extractRDD
       .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
       .map(word => word.replaceAll("[;.,\n\r]", ""))
-      .filter(x => x.length > 0)
+      .filter(x => x.nonEmpty)
       .map(word => (word, 1))
       .reduceByKey((x, y) => x + y)
       .persist()
@@ -152,7 +152,7 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     val wordsByInitialLetter = extractRDD
       .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
       .map(word => word.replaceAll("[;.,\n\r]", ""))
-      .filter(word => word.length > 0)
+      .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
       .groupByKey()
 
@@ -172,7 +172,7 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     val wordsByInitialLetter = extractRDD
       .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
       .map(word => word.replaceAll("[;.,\n\r]", ""))
-      .filter(word => word.length > 0)
+      .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
       .groupByKey()
 
@@ -189,7 +189,7 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     val wordsByInitialLetter = extractRDD
       .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
       .map(word => word.replaceAll("[;.,\n\r]", ""))
-      .filter(word => word.length > 0)
+      .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
       .reduceByKey((x, y) => x + y)
 
@@ -206,7 +206,7 @@ class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext with
     val wordsByInitialLetter = extractRDD
       .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
       .map(word => word.replaceAll("[;.,\n\r]", ""))
-      .filter(word => word.length > 0)
+      .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
       .reduceByKey((x, y) => x + y)
       .sortByKey(ascending = true)

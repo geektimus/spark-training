@@ -23,12 +23,12 @@ package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.
   */
-class SimpleRDDTransformationsTest extends FunSuite with SharedSparkContext {
+class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext {
 
   test("basic map transformation") {
     val values = List(1, 2, 3, 4, 5)

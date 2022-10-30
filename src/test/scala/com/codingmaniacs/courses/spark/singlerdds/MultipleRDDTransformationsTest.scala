@@ -23,15 +23,19 @@ package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 
 /**
   * This class contains all the tests related to Transformations over two RDDs.
   */
-class MultipleRDDTransformationsTest extends FunSuite with SharedSparkContext with BeforeAndAfter {
+class MultipleRDDTransformationsTest
+    extends AnyFunSuite
+    with SharedSparkContext
+    with BeforeAndAfter {
 
-  val firstList = List(1, 2, 3, 4)
-  val secondList = List(4, 5, 6, 7)
+  val firstList: Seq[Int] = List(1, 2, 3, 4)
+  val secondList: Seq[Int] = List(4, 5, 6, 7)
 
   var firstRDD: RDD[Int] = _
   var secondRDD: RDD[Int] = _

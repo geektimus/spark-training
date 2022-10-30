@@ -23,7 +23,8 @@ package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 import org.apache.spark.rdd.RDD
-import org.scalatest.{ FunSuite, Matchers }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 /**
   * This class contains all the tests related to Actions over Single RDD, RDD[String] and RDD[Int] mostly.
@@ -31,7 +32,7 @@ import org.scalatest.{ FunSuite, Matchers }
   * Note: This class won't include test for each since it doesn't return any value and if we try to test it we probably
   * get a "Task not serializable" Exception trying to use the assert inside the foreach
   */
-class SimpleActionsTest extends FunSuite with SharedSparkContext with Matchers {
+class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matchers {
 
   val default_parallelism: Int = 4
 
