@@ -26,10 +26,13 @@ import com.holdenkarau.spark.testing.SharedSparkContext
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-/**
-  * This class contains all the tests related to single RDD over Single RDD Transformations.
+/** This class contains all the tests related to single RDD over Single RDD
+  * Transformations.
   */
-class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext with Matchers {
+class SimpleRDDTransformationsTest
+    extends AnyFunSuite
+    with SharedSparkContext
+    with Matchers {
 
   val extract: String =
     """
@@ -46,7 +49,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val reduceBy = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(x => x.length > 8)
       .map(word => (word, 1))
@@ -64,7 +69,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val groupByKey = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.length > 1)
       .map(word => (word, 1))
@@ -102,12 +109,17 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
       (numberScores + 1, totalScore + score)
     }
 
-    val scoreMerger = (collector1: ScoreCollector, collector2: ScoreCollector) => {
-      val (numScores1, totalScore1) = collector1
-      val (numScores2, totalScore2) = collector2
-      (numScores1 + numScores2, totalScore1 + totalScore2)
-    }
-    val scores = wilmaAndFredScores.combineByKey(createScoreCombiner, scoreCombiner, scoreMerger)
+    val scoreMerger =
+      (collector1: ScoreCollector, collector2: ScoreCollector) => {
+        val (numScores1, totalScore1) = collector1
+        val (numScores2, totalScore2) = collector2
+        (numScores1 + numScores2, totalScore1 + totalScore2)
+      }
+    val scores = wilmaAndFredScores.combineByKey(
+      createScoreCombiner,
+      scoreCombiner,
+      scoreMerger
+    )
 
     val averagingFunction = (personScore: PersonScores) => {
       val (name, (numberScores, totalScore)) = personScore
@@ -124,7 +136,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordCounts = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(x => x.nonEmpty)
       .map(word => (word, 1))
@@ -137,7 +151,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
 
     val wordWeights = wordCounts
       .mapValues(value => math round ((value * 100) / totalWordCount.toFloat))
-      .filter(value => value._2 > 5) // Filter words with less than 5% of occurrences.
+      .filter(value =>
+        value._2 > 5
+      ) // Filter words with less than 5% of occurrences.
       .collectAsMap()
 
     val expectedPercentage = Map("it" -> 8, "i" -> 8)
@@ -150,7 +166,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
@@ -170,7 +188,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
@@ -187,7 +207,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
@@ -204,7 +226,9 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
+      .flatMap(lines =>
+        lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq
+      )
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))

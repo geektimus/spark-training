@@ -27,8 +27,8 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.serializer.KryoSerializer
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
-  * This class contains all the tests related to single RDD over Single RDD Transformations.
+/** This class contains all the tests related to single RDD over Single RDD
+  * Transformations.
   */
 class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext {
 
@@ -60,7 +60,8 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext {
     val values = List("spark apache scala", "java operations tests")
     val valRDD = sc.parallelize(values)
 
-    val expected = Array("spark", "apache", "scala", "java", "operations", "tests")
+    val expected =
+      Array("spark", "apache", "scala", "java", "operations", "tests")
     val res = valRDD.flatMap(phrase => phrase.split(" ")).collect()
     assert(res.sameElements(expected))
   }

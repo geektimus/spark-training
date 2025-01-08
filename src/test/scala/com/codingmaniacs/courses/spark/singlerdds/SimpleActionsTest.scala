@@ -26,13 +26,17 @@ import org.apache.spark.rdd.RDD
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-/**
-  * This class contains all the tests related to Actions over Single RDD, RDD[String] and RDD[Int] mostly.
+/** This class contains all the tests related to Actions over Single RDD,
+  * RDD[String] and RDD[Int] mostly.
   *
-  * Note: This class won't include test for each since it doesn't return any value and if we try to test it we probably
-  * get a "Task not serializable" Exception trying to use the assert inside the foreach
+  * Note: This class won't include test for each since it doesn't return any
+  * value and if we try to test it we probably get a "Task not serializable"
+  * Exception trying to use the assert inside the foreach
   */
-class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matchers {
+class SimpleActionsTest
+    extends AnyFunSuite
+    with SharedSparkContext
+    with Matchers {
 
   val default_parallelism: Int = 4
 
@@ -111,8 +115,7 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     assert(res.sameElements(expected))
   }
 
-  /**
-    * Take sample is nondeterministic so we can't validate the values.
+  /** Take sample is nondeterministic so we can't validate the values.
     */
   test("basic takeSample action") {
     val values = List(1, 2, 3, 4)
@@ -131,22 +134,23 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     assert(res == 10)
   }
 
-  /**
-    * Find the longest word
+  /** Find the longest word
     */
-  //TODO Find a way to find the shortest word using this same string as it contains two words of the same length.
+  // TODO Find a way to find the shortest word using this same string as it contains two words of the same length.
   test("basic reduce (strings) action") {
     val values = "basic operations spark scala java python data"
     val valRDD = sc.parallelize(values.split(" ").toIndexedSeq)
 
     val res =
-      valRDD.reduce((word_a, word_b) => if (word_a.length > word_b.length) word_a else word_b)
+      valRDD.reduce((word_a, word_b) =>
+        if (word_a.length > word_b.length) word_a else word_b
+      )
     assert(res == "operations")
   }
 
-  /**
-    * In this case the fold behaves in a similar way to the reduce function
-    * The value passed to fold should be the identity for the operation 0 for + and 1 for *
+  /** In this case the fold behaves in a similar way to the reduce function The
+    * value passed to fold should be the identity for the operation 0 for + and
+    * 1 for *
     */
   test("basic fold action 01 (similar to reduce [sum])") {
     val values = List(1, 2, 3, 4)
@@ -157,8 +161,7 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     assert(res == 10)
   }
 
-  /**
-    * In this case the fold behaves in a similar way to the reduce function
+  /** In this case the fold behaves in a similar way to the reduce function
     */
   test("basic fold action 02 (similar to reduce [multiplication])") {
     val values = List(1, 2, 3, 4)
@@ -169,8 +172,8 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     assert(res == 24)
   }
 
-  /**
-    * This is what happens when you provide a not identity value for the operation.
+  /** This is what happens when you provide a not identity value for the
+    * operation.
     */
   test("basic fold action 03") {
     val values = List(1, 2, 3, 4)
@@ -181,14 +184,14 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     assert(res == 20)
   }
 
-  /**
-    * Note here the Partition length is 4 (Given the cores on this box).
-    * So in each partition, after the RDD elements are added, the 'Zero value of 0.5' is also added (ie 0.5 * 4 = 2).
-    * When the result of each partition is added, once again a value of 0.5 is added to the result.
-    * Therefore we have ((0.5 * 4) + 0.5), totally 2.5
+  /** Note here the Partition length is 4 (Given the cores on this box). So in
+    * each partition, after the RDD elements are added, the 'Zero value of 0.5'
+    * is also added (ie 0.5 * 4 = 2). When the result of each partition is
+    * added, once again a value of 0.5 is added to the result. Therefore we have
+    * ((0.5 * 4) + 0.5), totally 2.5
     *
     * We can say that in this case the expected value is:
-    * - (identity*num-partitions)+identity + reduce ((x,y) => x + y)
+    *   - (identity*num-partitions)+identity + reduce ((x,y) => x + y)
     */
   test("basic fold action 04 (sum)") {
     val values = List(("maths", 4.2), ("science", 3.8))
@@ -204,14 +207,14 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     assert(res._2 == 10.5)
   }
 
-  /**
-    * Note here the Partition length is 4 (Given the cores on this box).
-    * So in each partition, after the RDD elements are multiplied, the 'Zero value of 0.5' is also multiplied (ie pow(0.5, 4) = 0.0625).
-    * When the result of each partition is added, once again a value of 0.5 is multiplied to the result.
+  /** Note here the Partition length is 4 (Given the cores on this box). So in
+    * each partition, after the RDD elements are multiplied, the 'Zero value of
+    * 0.5' is also multiplied (ie pow(0.5, 4) = 0.0625). When the result of each
+    * partition is added, once again a value of 0.5 is multiplied to the result.
     * Therefore we have (pow(0.5 , 5), totally 0.03125
     *
     * We can say that in this case the expected value is:
-    * - pow(identity, num-partitions + 1) * reduce ((x,y) => x * y)
+    *   - pow(identity, num-partitions + 1) * reduce ((x,y) => x * y)
     */
   test("basic fold action 05 (multiplication)") {
     val Eps = 1e-3
@@ -230,8 +233,8 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     res._2 should be(expected +- Eps)
   }
 
-  /**
-    * The result of the fold (with a non identity value) vs the result of the reduce
+  /** The result of the fold (with a non identity value) vs the result of the
+    * reduce
     */
   test("basic fold action 06 (reduce vs fold (non identity value)") {
     val values = List(("maths", 4.2), ("science", 3.8))
@@ -249,7 +252,9 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     val resReducer = valRDD.reduce((x, y) => ("total", x._2 + y._2))._2
     val numPartitions = valRDD.partitions.length
 
-    assert(resFold._2 == ((identity._2 * numPartitions) + identity._2 + resReducer))
+    assert(
+      resFold._2 == ((identity._2 * numPartitions) + identity._2 + resReducer)
+    )
 
     valRDD.unpersist()
   }
@@ -262,7 +267,10 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
     val res = valRDD.aggregate(zeroValue)(
       (accumulator, value) => (accumulator._1 + value, accumulator._2 + 1),
       (accumulator_1, accumulator_2) =>
-        (accumulator_1._1 + accumulator_2._1, accumulator_1._2 + accumulator_2._2)
+        (
+          accumulator_1._1 + accumulator_2._1,
+          accumulator_1._2 + accumulator_2._2
+        )
     )
 
     val expected = (9, 4)

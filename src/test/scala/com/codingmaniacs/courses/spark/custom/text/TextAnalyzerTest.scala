@@ -26,7 +26,10 @@ import com.holdenkarau.spark.testing.SharedSparkContext
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers {
+class TextAnalyzerTest
+    extends AnyFunSuite
+    with SharedSparkContext
+    with Matchers {
 
   test("The text analyzer should count the number of words in a text") {
     val randomText: String =
@@ -40,7 +43,7 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
 
     val result = TextAnalyzer.wordCountInText(textRDD)
 
-    val expected = 48 //Non unique words
+    val expected = 48 // Non unique words
 
     assert(result.equals(expected))
   }
@@ -87,12 +90,15 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
 
     val result = TextAnalyzer.countDataPerRowInText(regex, textRDD)
 
-    val expected = Array(("INFO", (5, 62.5)), ("ERROR", (2, 25)), ("WARN", (1, 12.5)))
+    val expected =
+      Array(("INFO", (5, 62.5)), ("ERROR", (2, 25)), ("WARN", (1, 12.5)))
 
     assert(result.sameElements(expected))
   }
 
-  test("The text analyzer should group the lines by the regex and count the number of appearances") {
+  test(
+    "The text analyzer should group the lines by the regex and count the number of appearances"
+  ) {
     val logLines: String =
       """
         |INFO: Dummy Info 1
@@ -111,7 +117,8 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
 
     val result = TextAnalyzer.countDataPerRowInText(regex, contentRDD)
 
-    val expected = Array(("INFO", (5, 62.5)), ("ERROR", (2, 25)), ("WARN", (1, 12.5)))
+    val expected =
+      Array(("INFO", (5, 62.5)), ("ERROR", (2, 25)), ("WARN", (1, 12.5)))
 
     assert(result.sameElements(expected))
   }

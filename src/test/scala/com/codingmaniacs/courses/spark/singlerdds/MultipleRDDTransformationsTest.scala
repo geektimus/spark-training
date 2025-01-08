@@ -26,8 +26,7 @@ import org.apache.spark.rdd.RDD
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.BeforeAndAfter
 
-/**
-  * This class contains all the tests related to Transformations over two RDDs.
+/** This class contains all the tests related to Transformations over two RDDs.
   */
 class MultipleRDDTransformationsTest
     extends AnyFunSuite
