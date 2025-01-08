@@ -69,7 +69,7 @@ object TextAnalyzer {
       data
         .flatMap(lines => lines.split(" "))
         .map(word => word.toLowerCase.replaceAll("[,.]", ""))
-        .filter(word => !word.trim.isEmpty && word.trim.length > 3)
+        .filter(word => word.trim.nonEmpty && word.trim.length > 3)
         .map(word => (word, 1))
         .reduceByKey((accumulator, n) => accumulator + n)
         .sortBy(value => value._2, ascending = false)
@@ -131,16 +131,16 @@ object TextAnalyzer {
   def countDataPerRowInText(regex: Regex, contents: RDD[String]): Array[(String, (Long, Double))] =
     contents match {
 
-      case data if data == null || data.isEmpty =>
+      case data if data == null || data.isEmpty() =>
         logger.error("Cannot perform analysis without data.")
         Array[(String, (Long, Double))]()
 
       case data =>
         val counts =
           data
-            .map { line =>
-              val regex(value) = line
-              value
+            .map {
+              case regex(value) => value
+              case _ => ""
             }
             .map(startWord => (startWord, 1L))
             .aggregateByKey(0L)((sum, pair) => sum + pair, _ + _)

@@ -36,7 +36,7 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
          |informed yet had admitted strictly how you.
       """.trim.stripMargin
 
-    val textRDD = sc.parallelize(randomText.split("\n"))
+    val textRDD = sc.parallelize(randomText.split("\n").toIndexedSeq)
 
     val result = TextAnalyzer.wordCountInText(textRDD)
 
@@ -57,7 +57,7 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
         |my pocket. I don't know why. And I don't seem able to make up my mind.
       """.trim.stripMargin
 
-    val textRDD = sc.parallelize(randomText.split("\n"))
+    val textRDD = sc.parallelize(randomText.split("\n").toIndexedSeq)
 
     val result = TextAnalyzer.calculateTopNWordsInText(textRDD, 4)
 
@@ -83,7 +83,7 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
 
     val regex = """^([A-Z]+):.*""".r
 
-    val textRDD = sc.parallelize(logLines.split("\n"))
+    val textRDD = sc.parallelize(logLines.split("\n").toIndexedSeq)
 
     val result = TextAnalyzer.countDataPerRowInText(regex, textRDD)
 
@@ -107,7 +107,7 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
 
     val regex = """^([A-Z]+):.*""".r
 
-    val contentRDD = sc.parallelize(logLines.split("\n"))
+    val contentRDD = sc.parallelize(logLines.split("\n").toIndexedSeq)
 
     val result = TextAnalyzer.countDataPerRowInText(regex, contentRDD)
 
@@ -133,7 +133,7 @@ class TextAnalyzerTest extends AnyFunSuite with SharedSparkContext with Matchers
 
     val regex = """^.*:\s([a-zA-Z]+)\s.*""".r
 
-    val contentRDD = sc.parallelize(logLines.split("\n"))
+    val contentRDD = sc.parallelize(logLines.split("\n").toIndexedSeq)
 
     val result = TextAnalyzer.countDataPerRowInText(regex, contentRDD)
 

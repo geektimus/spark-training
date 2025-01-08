@@ -49,3 +49,8 @@ build.log
 
 .metals
 .bloop
+.bsp
+.vscode
+null
+PowerShell*
+metals.sbt

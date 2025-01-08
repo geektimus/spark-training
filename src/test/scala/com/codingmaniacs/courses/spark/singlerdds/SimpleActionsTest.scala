@@ -137,7 +137,7 @@ class SimpleActionsTest extends AnyFunSuite with SharedSparkContext with Matcher
   //TODO Find a way to find the shortest word using this same string as it contains two words of the same length.
   test("basic reduce (strings) action") {
     val values = "basic operations spark scala java python data"
-    val valRDD = sc.parallelize(values.split(" "))
+    val valRDD = sc.parallelize(values.split(" ").toIndexedSeq)
 
     val res =
       valRDD.reduce((word_a, word_b) => if (word_a.length > word_b.length) word_a else word_b)

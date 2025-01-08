@@ -22,13 +22,30 @@
 package com.codingmaniacs.courses.spark.singlerdds
 
 import com.holdenkarau.spark.testing.SharedSparkContext
+import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
+import org.apache.spark.serializer.KryoSerializer
 import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * This class contains all the tests related to single RDD over Single RDD Transformations.
   */
 class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext {
+
+  // Override the conf to set up Kryo serialization
+  override def conf: SparkConf = {
+    val kryoConf = new SparkConf()
+      .setAppName("TextAnalyzerTest")
+      .setMaster("local[*]")
+      .set("spark.serializer", classOf[KryoSerializer].getName)
+      .set("spark.kryo.registrationRequired", "true")
+
+    kryoConf.registerKryoClasses(
+      Array(classOf[scala.collection.immutable.ArraySeq.ofInt])
+    )
+
+    kryoConf
+  }
 
   test("basic map transformation") {
     val values = List(1, 2, 3, 4, 5)
@@ -60,7 +77,7 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext {
 
   test("basic distinct transformation") {
     val values = "remember"
-    val valRDD = sc.parallelize(values.split(""))
+    val valRDD = sc.parallelize(values.split("").toIndexedSeq)
 
     val expected = "bemr"
     val res = valRDD.distinct().sortBy(x => x).collect().mkString("")
@@ -69,7 +86,7 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext {
 
   test("basic sample transformation") {
     val values = "remember"
-    val valRDD = sc.parallelize(values.split(""))
+    val valRDD = sc.parallelize(values.split("").toIndexedSeq)
     val expected = values.split("")
 
     val res = valRDD.sample(withReplacement = false, 1).collect()

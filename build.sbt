@@ -1,7 +1,7 @@
 lazy val `spark-challenges` =
   project
     .in(file("."))
-    .enablePlugins(AutomateHeaderPlugin, GitVersioning, JavaAppPackaging, AshScriptPlugin)
+    .enablePlugins(AutomateHeaderPlugin, JavaAppPackaging, AshScriptPlugin)
     .settings(name := "spark-challenges")
     .settings(settings)
     .settings(dockerSettings)
@@ -19,13 +19,13 @@ lazy val library =
 
     object Version {
 
-      val sparkVersion = "3.3.0"
-      val sparkTestingBase = "3.3.0_1.2.0"
-      val log4j2 = "2.19.0"
-      val slf4j = "2.0.3"
-      val scalaCheck = "1.17.0"
-      val specs2 = "4.17.0"
-      val reflect = "2.13.10"
+      val sparkVersion = "3.5.4"
+      val sparkTestingBase = "3.5.3_2.0.1"
+      val log4j2 = "2.24.3"
+      val slf4j = "2.0.16"
+      val scalaCheck = "1.18.1"
+      val specs2 = "4.20.9"
+      val reflect = "2.13.15"
     }
 
     // Spark Stuff
@@ -33,7 +33,6 @@ lazy val library =
     val sparkTestingBase = "com.holdenkarau" %% "spark-testing-base" % Version.sparkTestingBase
 
     val slf4jAPI = "org.slf4j" % "slf4j-api" % Version.slf4j
-    val slf4jNOP = "org.slf4j" % "slf4j-nop" % Version.slf4j
     val slf4jBinding = "org.slf4j" % "slf4j-log4j12" % Version.slf4j
     val log4j2Api = "org.apache.logging.log4j" % "log4j-api" % Version.log4j2
     val log4j2Core = "org.apache.logging.log4j" % "log4j-core" % Version.log4j2
@@ -53,37 +52,33 @@ lazy val library =
 
 lazy val settings =
   commonSettings ++
-  gitSettings ++
   scalafmtSettings
 
 lazy val commonSettings =
   Seq(
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.13.15",
     version := "0.1.0-SNAPSHOT",
     organization := "com.codingmaniacs.courses",
-    headerLicense := Some(HeaderLicense.MIT("2020", "Geektimus")),
+    headerLicense := Some(HeaderLicense.MIT("2024", "Geektimus")),
     scalacOptions ++= Seq(
-        "-deprecation",
-        "-encoding",
-        "UTF-8",
-        "-feature",
-        "-language:existentials",
-        "-language:higherKinds",
-        "-language:implicitConversions",
-        "-language:postfixOps",
-        "-target:jvm-1.8",
-        "-unchecked",
-        "-Xfatal-warnings",
-        "-Xlint",
-        "-Yno-adapted-args",
-        "-Ypartial-unification",
-        "-Ywarn-dead-code",
-        "-Ywarn-infer-any",
-        "-Ywarn-numeric-widen",
-        "-Ywarn-unused",
-        "-Ywarn-unused-import",
-        "-Ywarn-value-discard"
-      ),
+      "-deprecation",
+      "-encoding",
+      "UTF-8",
+      "-explaintypes",
+      "-feature",
+      "-language:existentials",
+      "-language:higherKinds",
+      "-language:implicitConversions",
+      "-language:postfixOps",
+      "-unchecked",
+      "-Xfatal-warnings",
+      "-Xlint",
+      "-Ywarn-dead-code",
+      "-Ywarn-extra-implicit",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-unused",
+      "-Ywarn-value-discard"
+    ),
     Test / parallelExecution := false,
     Compile / unmanagedSourceDirectories := Seq((Compile / scalaSource).value),
     Test / unmanagedSourceDirectories := Seq((Test / scalaSource).value)
@@ -97,7 +92,6 @@ lazy val dependencies =
   Seq(
     library.slf4jAPI % Provided,
     library.slf4jBinding % Provided,
-    library.slf4jNOP % Test,
 //    library.log4j2Api,
 //    library.log4j2Core
   ) ++
@@ -111,11 +105,6 @@ lazy val dockerSettings =
   Seq(
     dockerBaseImage := "openjdk:8-jdk-alpine",
     dockerUpdateLatest := true
-  )
-
-lazy val gitSettings =
-  Seq(
-    git.useGitDescribe := true
   )
 
 lazy val scalafmtSettings =

@@ -43,10 +43,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
     """
 
   test("basic reduceByKey transformation") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val reduceBy = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(x => x.length > 8)
       .map(word => (word, 1))
@@ -61,10 +61,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
   }
 
   test("basic groupByKey transformation") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val groupByKey = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.length > 1)
       .map(word => (word, 1))
@@ -93,7 +93,7 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
       ("Wilma", 98.0)
     )
 
-    val wilmaAndFredScores = sc.parallelize(initialScores).cache()
+    val wilmaAndFredScores = sc.parallelize(initialScores.toIndexedSeq).cache()
 
     val createScoreCombiner = (score: Double) => (1, score)
 
@@ -121,10 +121,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
   }
 
   test("basic mapValues transformation") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordCounts = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(x => x.nonEmpty)
       .map(word => (word, 1))
@@ -147,10 +147,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
   }
 
   test("basic flatMapValues transformation") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
@@ -167,10 +167,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
   }
 
   test("basic keys retrieval") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
@@ -184,10 +184,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
   }
 
   test("basic values retrieval") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))
@@ -201,10 +201,10 @@ class SimpleRDDTransformationsTest extends AnyFunSuite with SharedSparkContext w
   }
 
   test("basic sortByKeys transformation") {
-    val extractRDD = sc.parallelize(extract.split("\n"))
+    val extractRDD = sc.parallelize(extract.split("\n").toIndexedSeq)
 
     val wordsByInitialLetter = extractRDD
-      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" "))
+      .flatMap(lines => lines.toLowerCase(Locale.ENGLISH).split(" ").toIndexedSeq)
       .map(word => word.replaceAll("[;.,\n\r]", ""))
       .filter(word => word.nonEmpty)
       .map(word => (word.charAt(0), 1))

@@ -7,8 +7,12 @@
 ## Chapter 3: Programming with RDDs
 
 ### Exercises
+
 **TextAnalyzer:** Find the top n most common words in a text file
-```java -jar target/spark-certification-1.0-SNAPSHOT-dev.jar text-file.txt  number-of-words```
+
+```shell
+java -jar target/spark-certification-1.0-SNAPSHOT-dev.jar text-file.txt  number-of-words
+```
 
 Notes:
 * We need to improve the parameter handling in the main class.
